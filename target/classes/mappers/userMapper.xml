@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.tisproject.biz.user.Service.UserService">
+ 	
+ 	<select id="selectOne" parameterType="String" resultType="com.tisproject.biz.user.DTO.UserVO">
+ 		SELECT * FROM users
+ 		WHERE userid = #{userid}
+ 	</select>
+ 	
+ 	
+ 	<update id="profileupdate" parameterType="com.tisproject.biz.user.DTO.UserVO">
+ 		UPDATE users
+ 		SET nickname = #{nickname}, password = #{password},
+ 			email = #{email}, gender = ${gender},
+ 			favorite_genre1 = ${Favorite_Genre1},
+ 			favorite_genre2 = ${Favorite_Genre2},
+ 			favorite_genre3 = ${Favorite_Genre3}
+ 		WHERE userid = #{userid}
+ 	</update>
+ 	
+ 
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    
+			<!-- Error creating bean with name ‘multipartResolver’: -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean> 
+    
+    <!-- <context:component-scan base-package="com.tisproject" /> -->
+	
+
+    
+    
+    <!-- Error creating bean with name 'userController': Unsatisfied dependency expressed through field 'userService'; 
+    	nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: 
+    	No qualifying bean of type 'com.tisproject.biz.user.Service.UserService' 
+    	available: expected at least 1 bean which qualifies as autowire candidate. 
+    	Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)} -->
+	<mybatis-spring:scan base-package="com."/>
+
+	<context:property-placeholder location="classpath:config/database.properties"/>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- Spring JDBC 설정 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:sql-map-config.xml" />
+	</bean>
+	
+	<!-- 2번째 방식 -->
+	<bean id = "sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sessionFactory"></constructor-arg>
+	</bean>
+	
+<!--  	<bean id = "userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name = "mapperInterface" value = "com.tisproject.user.mapper.UserMapper"></property>
+		<property name = "sqlSessionTemplate" ref = "sqlSession"></property>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tisproject.user.mapper" />
+		<property name="annotationClass" value="com.tisproject.user.mapper.UserMapper" />
+	</bean> -->
+
+	
+</beans>
